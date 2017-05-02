@@ -1,0 +1,205 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
+<script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/usaLow.js"></script>
+<!-- <script src="https://www.amcharts.com/lib/3/maps/js/usaHigh.js"></script> -->
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/tools/datePadding/datePadding.min.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/dataloader/dataloader.min.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+<script type="text/javascript">
+    var app = angular.module('StateApp', []);
+
+        // var app = angular.module('StateApp', []);
+
+    app.controller('mainController', function($scope, $window){
+
+        $scope.states2 = [
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[4].id,
+                title: AmCharts.maps.usaLow.svg.g.path[4].title,
+                d: AmCharts.maps.usaLow.svg.g.path[4].d,
+                date: '1/10/80'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[44].id,
+                title: AmCharts.maps.usaLow.svg.g.path[44].title,
+                d: AmCharts.maps.usaLow.svg.g.path[44].d,
+                date: '1/12/76'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[14].id,
+                title: AmCharts.maps.usaLow.svg.g.path[14].title,
+                d: AmCharts.maps.usaLow.svg.g.path[14].d,
+                date: '1/3/95'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[34].id,
+                title: AmCharts.maps.usaLow.svg.g.path[34].title,
+                d: AmCharts.maps.usaLow.svg.g.path[34].d,
+                date: '4/6/99'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[43].id,
+                title: AmCharts.maps.usaLow.svg.g.path[43].title,
+                d: AmCharts.maps.usaLow.svg.g.path[43].d,
+                date: '5/7/00'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[9].id,
+                title: AmCharts.maps.usaLow.svg.g.path[9].title,
+                d: AmCharts.maps.usaLow.svg.g.path[9].d,
+                date: '8/15/05'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[46].id,
+                title: AmCharts.maps.usaLow.svg.g.path[46].title,
+                d: AmCharts.maps.usaLow.svg.g.path[46].d,
+                date: '9/29/10'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[37].id,
+                title: AmCharts.maps.usaLow.svg.g.path[37].title,
+                d: AmCharts.maps.usaLow.svg.g.path[37].d,
+                date: '10/23/17'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[33].id,
+                title: AmCharts.maps.usaLow.svg.g.path[33].title,
+                d: AmCharts.maps.usaLow.svg.g.path[33].d,
+                date: '3/25/24'
+            },
+            {
+                id: AmCharts.maps.usaLow.svg.g.path[22].id,
+                title: AmCharts.maps.usaLow.svg.g.path[22].title,
+                d: AmCharts.maps.usaLow.svg.g.path[22].d,
+                date: '2/10/01'
+            },
+        ]
+      
+      $scope.areas = function (date) {
+        var stateId = []
+        for(var i = 0; i < $scope.states2.length; i++){
+          if(Date.parse($scope.states2[i].date) <= Date.parse(date) || date == null){
+            stateId.push({
+              id: `${$scope.states2[i].id}`
+            })
+          }
+        }
+        loadMap(stateId);
+      };
+
+      $scope.showAllAreas = function () {
+        stateId = [];
+        for(var i = 0; i < $scope.states2.length; i++){
+          stateId.push({
+            id: `${$scope.states2[i].id}`
+          });
+        }
+        loadMap(stateId);
+      };
+
+      $scope.showAllStates = function () {
+        stateId =[];
+        var allStates = AmCharts.maps.usaLow.svg.g.path;
+        for(var i = 0; i < allStates.length; i++){
+          stateId.push({
+            id: `${allStates[i].id}`
+          })
+        }
+        loadMap(stateId);
+      };
+
+      loadMap = function (stateId) {
+        console.log(stateId, 'State')
+        map = AmCharts.makeChart( "chartdiv", {
+
+          "type": "map",
+            "theme": "dark",
+
+          "panEventsEnabled": true,
+          "dataProvider": {
+            "map": "usaLow",
+            "getAreasFromMap": false,
+            "areas" : stateId
+            
+          },
+          "areasSettings": {
+            "autoZoom": false,
+            "color": "#CDCDCD",
+            "colorSolid": "#5EB7DE",
+            "selectedColor": "#5EB7DE",
+            "outlineColor": "#666666",
+            "rollOverColor": "#88CAE7",
+            "rollOverOutlineColor": "#FFFFFF",
+            "selectable": false
+          },
+          "listeners": [ {
+            "event": "clickMapObject",
+            "method": function( event ) {
+
+              // deselect the area by assigning all of the dataProvider as selected object
+              const states = [];
+              map.selectedObject = map.dataProvider;
+
+              // toggle showAsSelected
+              event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
+
+              // bring it to an appropriate color
+              map.returnInitialColor( event.mapObject );
+            }
+          } ],
+          "export": {
+            "enabled": true
+          }
+        });      
+      }
+      $scope.areas()
+                    
+    })
+</script>
+
+<body ng-app="StateApp" class="container">
+  
+  <div id="info" class="row">
+  <div id="chartdiv" class="col-md-9"></div>
+    <div class="col-md-3" ng-controller="mainController" style="margin-top: 40px; padding-left: 40px;">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+              <th class="col-md-4"> State </th>
+              <th class="col-md-4"> Date </th>
+              <th class="col-md-4"> Select </th>                
+          </tr>                            
+        </thead>
+        <tbody>
+          <tr ng-repeat="state in states2">
+              <td class="col-md-4">{{state.title}}</td>
+              <td class="col-md-4">{{state.date}}</td>
+              <td class="col-md-4"><button ng-click="areas(state.date, $index)" class="btn btn-sm btn-primary">Select</button></td>              
+          </tr>
+        </tbody>
+      </table>
+    </div> 
+    <div class="col-md-12">
+        <button ng-controller="mainController" ng-click="showAllAreas()" class="btn btn-sm btn-danger pull-right">Reset Map</button>
+        <button ng-controller="mainController" ng-click="showAllStates()" class="btn btn-sm btn-success pull-right">Select All States</button>
+    </div>         
+  </div>
+</body>
+
+
+<style type="text/css">
+#chartdiv {
+  width: 100%;
+  height: 500px;
+  margin-top: 40px;
+}
+</style>
+
